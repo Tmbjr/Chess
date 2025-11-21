@@ -39,6 +39,7 @@
 *.exe
 *.out
 *.app
+chess
 
 # debug information files
 *.dwo

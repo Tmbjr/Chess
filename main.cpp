@@ -12,9 +12,6 @@ bool chooseColor();
 void placePieces(Tile[][8], bool);
 void clearScreen();
 
-//bool playTurn(Tile[][8]);
-
-
 int main (){
     //initialize and fill board with tiles
     Tile board[8][8];
@@ -31,19 +28,22 @@ int main (){
     return 0; 
 }
 
-
-
-
+/**
+ * This function is used to generate a new blank 8x8 board of Tile
+ * objects.
+ * 
+ * @param board[][8] - an 8x8 2-dimensional array of tile objects used
+ *                     to represent a chess board.
+ */
 void generateBoard(Tile board[][8]){
 
     std::string fill_color = WHITEBG;
 
     //for every row
     for(int i = 0; i < 8; ++i){
-
         //for every column
         for(int j = 0; j < 8; ++j){
-            //if we are on an even row
+            //if row index is even, even cols white
             if(i == 0 || i % 2 == 0){
                 if(j == 0 || j % 2 == 0){
                     fill_color = WHITEBG;
@@ -52,6 +52,7 @@ void generateBoard(Tile board[][8]){
                     fill_color = BLACKBG;
                 }
             }
+            //if row index is odd, even cols black
             else{
                 if(j == 0 || j % 2 == 0){
                     fill_color = BLACKBG;
@@ -60,59 +61,36 @@ void generateBoard(Tile board[][8]){
                     fill_color = WHITEBG;
                 }
             }
+            //set the fill color
             board[i][j].set_fill_color(fill_color);
+
+            //if this Tile is white, set its flag
+            if(fill_color == WHITEBG){
+                board[i][j].set_white(true);
+            }
         }
     }
-    
-    /*
-    Tile board[64];
-    std::string fill_color = WHITEBG;
-
-    //for each row
-    for(int i = 0; i < 8; ++i){
-
-        //if this is an even row
-        if(i == 0 || i % 2 == 0){
-            //for each tile in this even row
-            for(int j = 0; j < 8; ++j){
-                //if this tile is an even tile
-                if(j == 0 || j % 2 == 0){
-                    fill_color = WHITEBG;
-                }
-                else{
-                    fill_color = BLACKBG;
-                }
-                board[j + (i * 8)].set_fill_color(fill_color);
-
-            }
-        }
-        else{ // if this is an odd row
-            //for each tile in this odd row
-            for(int j = 0; j < 8; ++j){
-                //if this tile is an even tile
-                if(j == 0 || j % 2 == 0){
-                    fill_color = BLACKBG;
-                }
-                else{
-                    fill_color = WHITEBG;
-                }
-                board[j + (i * 8)].set_fill_color(fill_color);
-
-            }
-        }
-
-
-    }*/
 }
 
-
+/**
+ * This function prints the current contents of the chess board to stdout
+ * 
+ * @param board[][8] - an 8x8 2-dimensional array of tile objects used
+ *                     to represent a chess board.
+ * 
+ * @param white - boolean flag for the color of the player's pieces used to
+ *                print rank and file labels in the correct orientation.
+ */
 void printBoard(Tile board[][8], bool white){ 
 
     std::cout << "\n\n";
 
+    //for every row of tiles
     for(int i = 0; i < 8; ++i){
+        //for each layer of each tile
         for(int j = 0; j < 3; ++j){
 
+            //if this is the middle layer of the tile, print a rank label
             if(j == 1){
                 if(white){
                     std::cout << " " << BOARD_RANK[i] << " ";
@@ -125,12 +103,14 @@ void printBoard(Tile board[][8], bool white){
                 std::cout << "   ";
             }
 
+            //for each column (k) of tiles in row (i), print layer of index (j)
             for(int k = 0; k < 8; ++k){
                 board[i][k].print_tile(j);
             }
             std::cout << std::endl;
         }
     }
+    //print file labels 
     std::cout << "     "; 
     if(white){
         for(char c : BOARD_FILE){
@@ -146,7 +126,18 @@ void printBoard(Tile board[][8], bool white){
 
 }
 
+/**
+ * This function is used to place chess pieces in their starting positions on
+ * the newly created board. 
+ * 
+ * @param board[][8] - an 8x8 2-dimensional array of tile objects used
+ *                     to represent a chess board.
+ * @param white - boolean flag for the color of the player's pieces used to
+ *                place pieces of each color on their respective sides.
+ */
 void placePieces(Tile board[][8], bool white){
+
+    //handle placement of pieces if the player has chosen to play as white.
     if(white){
         for(int i = 0; i < 2; ++i){
             if(i == 0){
@@ -177,6 +168,7 @@ void placePieces(Tile board[][8], bool white){
             }
         }
     }
+    //handle placement of pieces if the player has chosen to play as black. 
     else{
         for(int i = 0; i < 2; ++i){
             if(i == 0){
@@ -209,12 +201,19 @@ void placePieces(Tile board[][8], bool white){
     }
 }
 
-
+/**
+ * This function clears the terminal to simulate a refresh of the board.
+ */
 void clearScreen(){
     system("clear");
     system("clear");
 }
 
+/**
+ * This function handles the player's choice of piece color to play as.
+ * 
+ * @return white - a boolean flag for the color of the player's pieces.
+ */
 bool chooseColor(){
     //prompt user to choose color
     bool white = true; 

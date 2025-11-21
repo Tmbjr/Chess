@@ -8,6 +8,7 @@
 #define WHITEBG "\x1b[48;5;250m"
 #define BLACKBG "\x1b[48;5;240m"
 #define NORMBG  "\x1b[0m"
+#define NORMFG  "\x1B[39m"
 
 #define W_KING      "\u2654"
 #define W_QUEEN     "\u2655"
