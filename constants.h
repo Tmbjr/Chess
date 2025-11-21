@@ -23,6 +23,9 @@
 #define B_KNIGHT    "\u265E"
 #define B_PAWN      "\u265F"
 
+const int BOARD_RANK[8] = {8, 7, 6, 5, 4, 3, 2, 1}; 
+const char BOARD_FILE[8] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+
 const std::string WHITE_RANK[8] = {W_ROOK, W_KNIGHT, W_BISHOP, W_QUEEN,
                                    W_KING, W_BISHOP, W_KNIGHT, W_ROOK};
 

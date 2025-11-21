@@ -6,57 +6,33 @@
 #include "tile.h"
 #include "piece.h"
 
-#define DIV "  +---+---+---+---+---+---+---+---+"
-#define FILE "ABCDEFGH"
-
-
 void generateBoard(Tile[][8]);
-void printBoard(Tile[][8]);
+void printBoard(Tile[][8], bool);
+bool chooseColor();
 void placePieces(Tile[][8], bool);
 void clearScreen();
 
+//bool playTurn(Tile[][8]);
+
 
 int main (){
+    //initialize and fill board with tiles
     Tile board[8][8];
     generateBoard(board);
 
-    //prompt user to choose color
-    bool white = true; 
-    char decision = ' ';
-
-    while(decision != 'W' && decision != 'B' && decision != 'Q'){
-        clearScreen();
-        std::cout << R"(   _____ _    _ ______  _____ _____ 
-  / ____| |  | |  ____|/ ____/ ____|
- | |    | |__| | |__  | (___| (___  
- | |    |  __  |  __|  \___ \\___ \ 
- | |____| |  | | |____ ____) |___) |
-  \_____|_|  |_|______|_____/_____/ 
-
-            [ C H E S S ]
-)" << std::endl;
-        std::cout << "\nEnter W to play as WHITE\n"
-                    << "Enter B to play as BLACK\n"
-                    << "Enter Q to quit\n:";
-        std::cin >> decision;
-        decision = std::toupper(decision);
-    }
-    
-    if(decision == toupper('q')){
-        clearScreen();
-        exit(1);
-    }
-    else if(decision != toupper('w')){
-        white = false;
-    }
-
+    //get player's choice of color
+    bool white = chooseColor(); 
     placePieces(board, white);
-
+    
+    //draw board
     clearScreen();
-    printBoard(board);
+    printBoard(board, white);
     
     return 0; 
 }
+
+
+
 
 void generateBoard(Tile board[][8]){
 
@@ -130,11 +106,24 @@ void generateBoard(Tile board[][8]){
 }
 
 
-void printBoard(Tile board[][8]){ 
+void printBoard(Tile board[][8], bool white){ 
+
+    std::cout << "\n\n";
 
     for(int i = 0; i < 8; ++i){
         for(int j = 0; j < 3; ++j){
-            std::cout << "   ";
+
+            if(j == 1){
+                if(white){
+                    std::cout << " " << BOARD_RANK[i] << " ";
+                }
+                else{
+                    std::cout << " " << BOARD_RANK[7 - i] << " ";
+                }
+            }
+            else{
+                std::cout << "   ";
+            }
 
             for(int k = 0; k < 8; ++k){
                 board[i][k].print_tile(j);
@@ -142,6 +131,18 @@ void printBoard(Tile board[][8]){
             std::cout << std::endl;
         }
     }
+    std::cout << "     "; 
+    if(white){
+        for(char c : BOARD_FILE){
+            std::cout << c << "    ";
+        }
+    }
+    else{
+        for(int i = 7; i >= 0; --i){
+            std::cout << BOARD_FILE[i] << "    ";
+        }
+    }
+    std::cout << std::endl;
 
 }
 
@@ -162,7 +163,7 @@ void placePieces(Tile board[][8], bool white){
             }
         }
         for(int i = 6; i < 8; ++i){
-            if(i == 0){
+            if(i == 6){
                 for(int j = 0; j < 8; ++j){
                     Piece new_piece = Piece(WHITE, W_PAWN);
                     board[i][j].set_occupier(new_piece);
@@ -192,7 +193,7 @@ void placePieces(Tile board[][8], bool white){
             }
         }
         for(int i = 6; i < 8; ++i){
-            if(i == 0){
+            if(i == 6){
                 for(int j = 0; j < 8; ++j){
                     Piece new_piece = Piece(BLACK, B_PAWN);
                     board[i][j].set_occupier(new_piece);
@@ -212,4 +213,38 @@ void placePieces(Tile board[][8], bool white){
 void clearScreen(){
     system("clear");
     system("clear");
+}
+
+bool chooseColor(){
+    //prompt user to choose color
+    bool white = true; 
+    char decision = ' ';
+
+    while(decision != 'W' && decision != 'B' && decision != 'Q'){
+        clearScreen();
+        std::cout << R"(   _____ _    _ ______  _____ _____ 
+  / ____| |  | |  ____|/ ____/ ____|
+ | |    | |__| | |__  | (___| (___  
+ | |    |  __  |  __|  \___ \\___ \ 
+ | |____| |  | | |____ ____) |___) |
+  \_____|_|  |_|______|_____/_____/ 
+
+            [ C H E S S ]
+)" << std::endl;
+        std::cout << "\nEnter W to play as WHITE\n"
+                    << "Enter B to play as BLACK\n"
+                    << "Enter Q to quit\n:";
+        std::cin >> decision;
+        decision = std::toupper(decision);
+    }
+    
+    if(decision == toupper('q')){
+        clearScreen();
+        exit(1);
+    }
+    else if(decision != toupper('w')){
+        white = false;
+    }
+
+    return white; 
 }
