@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "tile.h"
 #include "piece.h"
+#include "movement.h"
 
 void generateBoard(Tile[][8]);
 void printBoard(Tile[][8], bool);
@@ -24,6 +25,18 @@ int main (){
     //draw board
     clearScreen();
     printBoard(board, white);
+
+    std::cout << "ENTER a piece to move by rank/file i.e. 'A1'\n:";
+    std::string selection = "";
+    std::cin >> selection;
+
+
+    std::pair<int, int> converted = convertCoords({selection[0], selection[1] - '0'}, white);
+
+    if(converted.first > 0){
+        std::cout << "converted coords " << selection << " to " << converted.first << converted.second;
+    }
+
     
     return 0; 
 }
